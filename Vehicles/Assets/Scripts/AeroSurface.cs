@@ -16,8 +16,14 @@ public class AeroSurface : MonoBehaviour {
     
     // "Constants"
     private float _correctedLiftSlope;
-    
+
+    private void OnValidate() {
+        config.Validate();
+    }
+
     private void Awake() {
+        
+        config.Validate();
         
         // Calculate flap chord from flap fraction and chord length.
         _flapChord = config.chord * config.flapFraction;
@@ -36,8 +42,10 @@ public class AeroSurface : MonoBehaviour {
         // x = z;
         // z = y;
 
-        // B. Angle of Attack
-        _angleOfAttack = Mathf.Atan(_worldVelocity.y / worldAirVelocity.z);
+        // // B. Angle of Attack
+        // _angleOfAttack = Mathf.Atan(_worldVelocity.y / worldAirVelocity.z);
+        // Debug.Log(_angleOfAttack);
+        
         // _angleOfAttack = Mathf.Atan2(airVelocity.y, -airVelocity.x);
         
         // D. Effect of Control Surface Deflection
@@ -57,17 +65,24 @@ public class AeroSurface : MonoBehaviour {
         Vector3 dragDir = transform.InverseTransformDirection(localAirVelocity.normalized);
         Vector3 liftDir = Vector3.Cross(dragDir, transform.right); // Get lift direction by getting the vector perpendicular to drag direction and -transform.right
 
+        _angleOfAttack = Mathf.Atan(localAirVelocity.y / -localAirVelocity.z);
+        Debug.Log(_angleOfAttack);
+        
+        //Debug.Log((liftDir));
         float dynamicAirPressure = airDensity * localAirVelocity.sqrMagnitude / 2;
 
-        config.wingArea = 4;
+        //config.wingArea = 4;
         
         Vector3 lift = liftCoefficient * dynamicAirPressure * config.wingArea * liftDir;
         Vector3 drag = dragCoefficient * dynamicAirPressure * config.wingArea * dragDir;
         force = lift + drag;
+        //force = drag;
         
         torque = torqueCoefficient * dynamicAirPressure * config.wingArea * config.chord * transform.right;
-        torque += Vector3.Cross(transform.localPosition, force); // Add torque resulting from forces action offset from aircraft COM
+        torque = Vector3.Scale(torque, new Vector3(1, 1, 1));
+        torque = Vector3.Cross(transform.localPosition, force); // Add torque resulting from forces action offset from aircraft COM
 
+        Debug.Log(Vector3.Cross(transform.localPosition, force));
         // force = Vector3.one * 10;
         // torque = Vector3.one * 10;
 

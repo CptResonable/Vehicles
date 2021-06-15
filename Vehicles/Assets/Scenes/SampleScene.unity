@@ -868,7 +868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prop: {fileID: 310477217}
-  force: 1000
+  force: 3000
 --- !u!114 &1593491842
 MonoBehaviour:
   m_ObjectHideFlags: 0

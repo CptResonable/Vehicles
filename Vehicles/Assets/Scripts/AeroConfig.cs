@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Policy;
 using UnityEngine;
 [System.Serializable]
 public class AeroConfig {
@@ -14,6 +15,25 @@ public class AeroConfig {
     public bool autoAspectRatio = true;
     public float aspectRatio = 2;
 
-    [HideInInspector] public float wingArea;
+    public float wingArea;
     //[HideInInspector] public float wingLength;
+    
+    public void Validate()
+    {
+        if (flapFraction > 0.4f)
+            flapFraction = 0.4f;
+        if (flapFraction < 0)
+            flapFraction = 0;
+
+        if (stallAngleHigh < 0) stallAngleHigh = 0;
+        if (stallAngleLow > 0) stallAngleLow = 0;
+
+        if (chord < 1e-3f)
+            chord = 1e-3f;
+
+        if (autoAspectRatio)
+            aspectRatio = span / chord;
+
+        wingArea = chord * span;
+    }
 }

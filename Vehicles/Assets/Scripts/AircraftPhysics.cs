@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class AircraftPhysics : MonoBehaviour {
     [SerializeField] private AeroSurface[] surfaces;
-
+    [SerializeField] private Vector3 testTorque;
+    
     private Rigidbody _rb;
 
     private void Awake() {
@@ -22,10 +23,12 @@ public class AircraftPhysics : MonoBehaviour {
             totalTorque += torque;
         }
         
-        _rb.AddForce(totalForce);
+        //_rb.AddForce(totalForce);
         _rb.AddTorque(totalTorque);
+        //_rb.AddTorque(testTorque);
         
-        Debug.Log("Force: " + totalForce);
-        Debug.Log("Torque: " + totalTorque);
+        // //Debug.Log(_rb.velocity.magnitude * 3.6f);
+        // Debug.Log("Force: " + totalForce);
+        // Debug.Log("Torque: " + totalTorque);
     }
 }
